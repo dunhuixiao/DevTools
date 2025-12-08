@@ -91,7 +91,6 @@ const message = useMessage();
 const { copy } = useClipboard();
 
 const content = ref("");
-const inputRef = ref<InstanceType<typeof NInput> | null>(null);
 
 // 历史记录栈
 const history = ref<string[]>([]);

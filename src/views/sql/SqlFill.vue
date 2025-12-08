@@ -60,8 +60,6 @@ const { copy } = useClipboard()
 
 const sqlTemplate = ref('')
 const parameters = ref('')
-const sqlInputRef = ref<InstanceType<typeof NInput> | null>(null)
-const paramInputRef = ref<InstanceType<typeof NInput> | null>(null)
 
 // 历史记录栈 - 分别为 SQL 和参数维护
 const sqlHistory = ref<string[]>([])
@@ -71,21 +69,6 @@ const paramHistoryIndex = ref(-1)
 
 // 当前获取焦点的输入框
 let lastFocusedInput: 'sql' | 'param' = 'sql'
-
-// 是否可以撤销/重做
-const canUndo = computed(() => {
-  if (lastFocusedInput === 'sql') {
-    return sqlHistoryIndex.value > 0
-  }
-  return paramHistoryIndex.value > 0
-})
-
-const canRedo = computed(() => {
-  if (lastFocusedInput === 'sql') {
-    return sqlHistoryIndex.value < sqlHistory.value.length - 1
-  }
-  return paramHistoryIndex.value < paramHistory.value.length - 1
-})
 
 // 添加 SQL 历史记录
 const addSqlHistory = (value: string) => {

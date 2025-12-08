@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { NIcon, NCard, NGrid, NGridItem, NTag, NDivider } from 'naive-ui'
+import { NIcon, NCard, NGrid, NGridItem, NTag } from 'naive-ui'
 import { 
   ConstructOutline, 
   CodeSlashOutline, 
