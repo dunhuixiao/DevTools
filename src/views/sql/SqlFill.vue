@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { NCard, NSpace, NFormItem, NInput, NButton, NAlert, useMessage } from 'naive-ui'
 import { useClipboard } from '../../composables/useClipboard'
 
