@@ -3,10 +3,10 @@
     circle
     quaternary
     tag="a"
-    href="https://github.com/dunhuixiao"
+    href="https://github.com/dunhuixiao/DevTools"
     target="_blank"
     rel="noopener noreferrer"
-    title="访问 GitHub"
+    title="GitHub"
     class="github-link"
   >
     <template #icon>

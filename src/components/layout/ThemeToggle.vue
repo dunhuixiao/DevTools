@@ -27,7 +27,7 @@ const themeIcon = computed(() => {
 })
 
 const themeTitle = computed(() => {
-  return isDark.value ? '切换到亮色模式' : '切换到暗色模式'
+  return isDark.value ? '浅色模式' : '深色模式'
 })
 </script>
 
