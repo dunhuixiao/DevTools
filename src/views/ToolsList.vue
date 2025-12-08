@@ -56,12 +56,12 @@ const tools = [
     type: 'success'
   },
   {
-    id: 'sql-fill',
-    name: 'SQL 数据填充',
-    description: '将参数值填充到 SQL 模板中',
+    id: 'sql-tools',
+    name: 'SQL 工具',
+    description: '提供 SQL 数据填充等实用功能',
     category: 'SQL 工具',
     icon: ServerOutline,
-    route: '/sql/fill',
+    route: '/sql',
     type: 'info'
   }
 ]

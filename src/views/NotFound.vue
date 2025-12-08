@@ -3,7 +3,7 @@
     <n-result
       status="404"
       title="404 页面未找到"
-      :description="`抱歉，您访问的页面 ${currentPath} 不存在`"
+      :description="`抱歉，您访问的功能暂未上线或地址有误。`"
     >
       <template #footer>
         <n-space vertical :size="16">

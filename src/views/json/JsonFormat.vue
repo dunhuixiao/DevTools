@@ -1,6 +1,6 @@
 <template>
   <div class="tool-container">
-    <n-card title="JSON 工具" :segmented="{ content: true }" class="tool-card">
+    <n-card title="JSON 格式化" :segmented="{ content: true }" class="tool-card">
       <template #header-extra>
         <n-space>
           <n-button type="primary" size="small" @click="handleFormat"
@@ -15,10 +15,10 @@
           <n-button type="primary" size="small" @click="handleUnescape"
             >反转义</n-button
           >
-          <n-button size="small" @click="handleClear">清空</n-button>
           <n-button size="small" @click="handleCopy" :disabled="!content"
             >复制</n-button
           >
+          <n-button size="small" @click="handleClear">清空</n-button>
         </n-space>
       </template>
 

@@ -37,7 +37,7 @@ import { computed, h } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { NLayoutHeader, NIcon, NSpace, NMenu } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
-import { ConstructOutline, HomeOutline, CodeSlashOutline, ServerOutline } from '@vicons/ionicons5'
+import { ConstructOutline, CodeSlashOutline, ServerOutline } from '@vicons/ionicons5'
 import ThemeToggle from './ThemeToggle.vue'
 import GithubLink from './GithubLink.vue'
 
@@ -52,25 +52,14 @@ const renderIcon = (icon: any) => {
 
 const menuOptions: MenuOption[] = [
   {
-    label: '首页',
-    key: '/',
-    icon: renderIcon(HomeOutline)
-  },
-  {
     label: 'JSON 工具',
     key: '/json',
     icon: renderIcon(CodeSlashOutline)
   },
   {
     label: 'SQL 工具',
-    key: 'sql',
-    icon: renderIcon(ServerOutline),
-    children: [
-      {
-        label: 'SQL 数据填充',
-        key: '/sql/fill'
-      }
-    ]
+    key: '/sql',
+    icon: renderIcon(ServerOutline)
   }
 ]
 

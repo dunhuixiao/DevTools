@@ -4,31 +4,51 @@ import type { RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('../views/Home.vue'),
+    name: 'ToolsList',
+    component: () => import('../views/ToolsList.vue'),
     meta: {
       title: '开发工具箱',
-      hideInMenu: false
+      hideInMenu: true
     }
   },
-  // JSON 工具
+  // JSON 工具导航页
   {
     path: '/json',
-    name: 'JsonTools',
-    component: () => import('../views/json/JsonTools.vue'),
+    name: 'JsonToolsNav',
+    component: () => import('../views/json/JsonToolsNav.vue'),
     meta: {
       title: 'JSON 工具',
       hideInMenu: false
     }
   },
-  // SQL 工具
+  // JSON 格式化
+  {
+    path: '/json/format',
+    name: 'JsonFormat',
+    component: () => import('../views/json/JsonFormat.vue'),
+    meta: {
+      title: 'JSON 格式化',
+      hideInMenu: true
+    }
+  },
+  // SQL 工具导航页
+  {
+    path: '/sql',
+    name: 'SqlToolsNav',
+    component: () => import('../views/sql/SqlToolsNav.vue'),
+    meta: {
+      title: 'SQL 工具',
+      hideInMenu: false
+    }
+  },
+  // SQL 数据填充
   {
     path: '/sql/fill',
     name: 'SqlFill',
     component: () => import('../views/sql/SqlFill.vue'),
     meta: {
       title: 'SQL 数据填充',
-      hideInMenu: false
+      hideInMenu: true
     }
   },
   {

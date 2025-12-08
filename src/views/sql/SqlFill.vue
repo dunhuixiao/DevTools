@@ -1,50 +1,52 @@
 <template>
   <div class="tool-container">
     <n-card title="SQL 数据填充" :segmented="{ content: true }" class="tool-card">
-      <n-space vertical :size="16" style="height: 100%; display: flex; flex-direction: column;">
-        <n-alert type="info" title="使用说明">
-          <ul style="margin: 8px 0; padding-left: 20px;">
-            <li>在 SQL 模板中使用 <code>?</code> 作为占位符</li>
-            <li>参数支持两种格式：
-              <ul style="margin-top: 4px;">
-                <li><strong>带类型标注</strong>: 值(类型)，如 <code>1425644204015037522(Long)</code></li>
-                <li><strong>简单值</strong>: 直接输入，系统自动推断类型</li>
-              </ul>
-            </li>
-            <li>支持的类型: String, Long, Integer, Boolean, Null, Date, Array</li>
-            <li><strong>注意</strong>: Long 类型会保持完整精度，避免 JavaScript 数字精度丢失</li>
-          </ul>
-        </n-alert>
+      <template #header-extra>
+        <n-space>
+          <n-button size="small" @click="handleCopyResult" :disabled="!filledResult">复制结果</n-button>
+          <n-button size="small" @click="handleClear">清空</n-button>
+        </n-space>
+      </template>
 
-        <n-form-item label="SQL 模板（填充后将覆盖此处）" style="flex: 1; display: flex; flex-direction: column;">
+      <n-space vertical :size="12" style="height: 100%; display: flex; flex-direction: column;">
+        <n-form-item label="SQL 模板" class="sql-form-item">
           <n-input
             ref="sqlInputRef"
             v-model:value="sqlTemplate"
             type="textarea"
             placeholder="请输入 SQL 模板，使用 ? 作为占位符&#10;示例: SELECT * FROM users WHERE id = ? AND name = ? AND age > ?"
-            style="flex: 1;"
-            :autosize="false"
+            class="sql-input"
+            :autosize="{ minRows: 5, maxRows: 10 }"
             @keydown="handleSqlKeydown"
+            @wheel.stop
           />
         </n-form-item>
 
-        <n-form-item label="参数列表（每行一个参数）" style="flex: 1; display: flex; flex-direction: column;">
+        <n-form-item label="参数列表（逗号分隔）" class="sql-form-item">
           <n-input
             ref="paramInputRef"
             v-model:value="parameters"
             type="textarea"
-            placeholder="请输入参数，每行一个&#10;示例:&#10;1425644204015037522(Long)&#10;张三&#10;18"
-            style="flex: 1;"
-            :autosize="false"
+            placeholder="请输入参数，逗号分隔&#10;示例: 123(Long), 张三(String), 18(Integer)"
+            class="sql-input"
+            :autosize="{ minRows: 5, maxRows: 10 }"
             @keydown="handleParamKeydown"
+            @blur="handleAutoFill"
+            @wheel.stop
           />
         </n-form-item>
 
-        <n-space>
-          <n-button type="primary" @click="handleFill">填充</n-button>
-          <n-button @click="handleClear">清空</n-button>
-          <n-button @click="handleCopy" :disabled="!sqlTemplate">复制 SQL</n-button>
-        </n-space>
+        <n-form-item label="填充结果" class="sql-form-item">
+          <n-input
+            v-model:value="filledResult"
+            type="textarea"
+            placeholder="填充结果将在此显示"
+            class="sql-input"
+            :autosize="{ minRows: 10, maxRows: 20 }"
+            readonly
+            @wheel.stop
+          />
+        </n-form-item>
       </n-space>
     </n-card>
   </div>
@@ -52,7 +54,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { NCard, NSpace, NFormItem, NInput, NButton, NAlert, useMessage } from 'naive-ui'
+import { NCard, NSpace, NFormItem, NInput, NButton, useMessage } from 'naive-ui'
 import { useClipboard } from '../../composables/useClipboard'
 
 const message = useMessage()
@@ -60,6 +62,7 @@ const { copy } = useClipboard()
 
 const sqlTemplate = ref('')
 const parameters = ref('')
+const filledResult = ref('')
 
 // 历史记录栈 - 分别为 SQL 和参数维护
 const sqlHistory = ref<string[]>([])
@@ -147,7 +150,7 @@ const handleParamKeydown = (e: KeyboardEvent) => {
 }
 
 // 参数类型定义
-type ParamType = 'String' | 'Long' | 'Integer' | 'Boolean' | 'Null' | 'Date' | 'Array'
+type ParamType = 'String' | 'Long' | 'Integer' | 'Boolean' | 'Null' | 'Date' | 'Timestamp' | 'BigDecimal' | 'Array'
 
 interface ParsedParam {
   value: string
@@ -160,8 +163,8 @@ interface ParsedParam {
 const parseParameter = (param: string): ParsedParam => {
   const trimmed = param.trim()
   
-  // 检查是否有类型标注 格式: 值(类型)
-  const typeMatch = trimmed.match(/^(.+?)\((\w+)\)$/)
+  // 检查是否有类型标注 格式: 值(类型) 或 (类型) 表示空值
+  const typeMatch = trimmed.match(/^(.*?)\((\w+)\)$/)
   
   if (typeMatch) {
     const [, value = '', type = 'String'] = typeMatch
@@ -209,13 +212,18 @@ const formatParameter = (parsed: ParsedParam): string => {
   
   switch (type) {
     case 'String':
+      // 空值处理
+      if (!value) {
+        return "''"
+      }
       // 转义单引号
       return `'${value.replace(/'/g, "''")}'`
     
     case 'Long':
     case 'Integer':
+    case 'BigDecimal':
       // 数字类型直接输出，不加引号，保持精度
-      return value
+      return value || '0'
     
     case 'Boolean':
       return value.toLowerCase() === 'true' ? '1' : '0'
@@ -224,6 +232,7 @@ const formatParameter = (parsed: ParsedParam): string => {
       return 'NULL'
     
     case 'Date':
+    case 'Timestamp':
       return `'${value}'`
     
     case 'Array':
@@ -256,12 +265,9 @@ const handleFill = () => {
   }
   
   try {
-    // 填充前保存 SQL 历史
-    addSqlHistory(sqlTemplate.value)
-    
-    // 解析参数列表
-    const paramLines = parameters.value.split('\n').filter(line => line.trim())
-    const parsedParams = paramLines.map(parseParameter)
+    // 解析参数列表（逗号分隔）
+    const paramItems = parameters.value.split(',').map(p => p.trim()).filter(p => p)
+    const parsedParams = paramItems.map(parseParameter)
     
     // 统计占位符数量
     const placeholderCount = (sqlTemplate.value.match(/\?/g) || []).length
@@ -271,16 +277,23 @@ const handleFill = () => {
       return
     }
     
-    // 替换占位符，直接覆盖 SQL 模板框
+    // 替换占位符，生成结果
     let result = sqlTemplate.value
     parsedParams.forEach(param => {
       result = result.replace('?', formatParameter(param))
     })
     
-    sqlTemplate.value = result
-    message.success('填充成功，结果已覆盖到 SQL 模板框')
+    filledResult.value = result
+    message.success('填充成功')
   } catch (error) {
     message.error(`填充失败: ${(error as Error).message}`)
+  }
+}
+
+// 参数输入框失焦时自动填充
+const handleAutoFill = () => {
+  if (sqlTemplate.value.trim() && parameters.value.trim()) {
+    handleFill()
   }
 }
 
@@ -293,11 +306,12 @@ const handleClear = () => {
   }
   sqlTemplate.value = ''
   parameters.value = ''
+  filledResult.value = ''
 }
 
-const handleCopy = async () => {
-  if (sqlTemplate.value) {
-    await copy(sqlTemplate.value)
+const handleCopyResult = async () => {
+  if (filledResult.value) {
+    await copy(filledResult.value)
   }
 }
 </script>
@@ -308,36 +322,64 @@ const handleCopy = async () => {
   max-width: 100%;
   width: 100%;
   margin: 0;
-  height: calc(100vh - 120px);
-  overflow: hidden;
+  min-height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
 .tool-card {
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
 }
 
 .tool-card :deep(.n-card__content) {
   flex: 1;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-.tool-card :deep(.n-form-item-blank) {
-  flex: 1;
+.sql-form-item :deep(.n-form-item-blank) {
   display: flex;
   flex-direction: column;
 }
 
-.tool-card :deep(.n-input-wrapper) {
-  height: 100%;
+.sql-input {
+  display: flex;
+  flex-direction: column;
 }
 
-.tool-card :deep(.n-input__textarea-el) {
-  height: 100%;
-  resize: none;
+.sql-input :deep(.n-input-wrapper) {
+  width: 100%;
+}
+
+.sql-input :deep(.n-input__textarea) {
+  width: 100%;
+}
+
+.sql-input :deep(.n-input__textarea-el),
+.sql-input :deep(textarea) {
+  resize: none !important;
+  font-family: var(--font-family-mono);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* 彻底移除拖拽手柄 - 多种浏览器兼容 */
+.sql-input :deep(textarea::-webkit-resizer),
+.sql-input :deep(.n-input__textarea-el::-webkit-resizer) {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+.sql-input :deep(textarea),
+.sql-input :deep(.n-input__textarea-el) {
+  resize: none !important;
+  overflow: auto !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
 }
 
 code {
@@ -360,6 +402,5 @@ ul ul {
   font-family: var(--font-family-mono);
   font-size: 14px;
   line-height: 1.6;
-  resize: none !important;
 }
 </style>
