@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>重定向中...</title>
+  <script>
+    // GitHub Pages SPA 路由重定向
+    // 将 404 页面重定向到 index.html，并保留路径信息
+    (function() {
+      var path = window.location.pathname;
+      var search = window.location.search;
+      var hash = window.location.hash;
+      
+      // 移除 /DevTools/ 前缀，获取实际路径
+      var actualPath = path.replace('/DevTools/', '/');
+      
+      // 重定向到 index.html，并将路径信息作为参数传递
+      window.location.replace(
+        '/DevTools/?' + 
+        (actualPath === '/' ? '' : 'redirect=' + encodeURIComponent(actualPath + search + hash))
+      );
+    })();
+  </script>
+</head>
+<body>
+  <p>重定向中，请稍候...</p>
+</body>
+</html>
