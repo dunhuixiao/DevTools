@@ -21,15 +21,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { NResult, NButton, NSpace, NText } from 'naive-ui'
 
 const router = useRouter()
-const route = useRoute()
 const countdown = ref(5)
 let timer: number | null = null
-
-const currentPath = ref(route.path)
 
 const goHome = () => {
   router.push('/')
