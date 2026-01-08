@@ -37,14 +37,19 @@ import { computed, h } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { NLayoutHeader, NIcon, NSpace, NMenu } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
-import { ConstructOutline, CodeSlashOutline, ServerOutline } from '@vicons/ionicons5'
+import { ConstructOutline, CodeSlashOutline, ServerOutline, DocumentTextOutline } from '@vicons/ionicons5'
 import ThemeToggle from './ThemeToggle.vue'
 import GithubLink from './GithubLink.vue'
 
 const router = useRouter()
 const route = useRoute()
 
-const activeKey = computed(() => route.path)
+// 计算当前激活的菜单项
+const activeKey = computed(() => {
+  const path = route.path
+  // 返回完整路径以匹配子菜单项
+  return path
+})
 
 const renderIcon = (icon: any) => {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -53,13 +58,27 @@ const renderIcon = (icon: any) => {
 const menuOptions: MenuOption[] = [
   {
     label: 'JSON 工具',
-    key: '/json',
-    icon: renderIcon(CodeSlashOutline)
+    key: 'json',
+    icon: renderIcon(CodeSlashOutline),
+    children: [
+      {
+        label: 'JSON 格式化',
+        key: '/json/format',
+        icon: renderIcon(DocumentTextOutline)
+      }
+    ]
   },
   {
     label: 'SQL 工具',
-    key: '/sql',
-    icon: renderIcon(ServerOutline)
+    key: 'sql',
+    icon: renderIcon(ServerOutline),
+    children: [
+      {
+        label: 'SQL 数据填充',
+        key: '/sql/fill',
+        icon: renderIcon(DocumentTextOutline)
+      }
+    ]
   }
 ]
 

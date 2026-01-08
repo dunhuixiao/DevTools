@@ -44,24 +44,24 @@ import {
 
 const router = useRouter()
 
-// 工具列表（示例）
+// 工具列表
 const tools = [
   {
-    id: 'json-tools',
-    name: 'JSON 工具',
+    id: 'json-format',
+    name: 'JSON 格式化',
     description: '提供 JSON 格式化、压缩、转义/反转义功能',
     category: 'JSON 工具',
     icon: CodeSlashOutline,
-    route: '/json',
+    route: '/json/format',
     type: 'success'
   },
   {
-    id: 'sql-tools',
-    name: 'SQL 工具',
-    description: '提供 SQL 数据填充等实用功能',
+    id: 'sql-fill',
+    name: 'SQL 数据填充',
+    description: '将参数值填充到 SQL 模板中',
     category: 'SQL 工具',
     icon: ServerOutline,
-    route: '/sql',
+    route: '/sql/fill',
     type: 'info'
   }
 ]

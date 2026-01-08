@@ -11,16 +11,6 @@ const routes: RouteRecordRaw[] = [
       hideInMenu: true
     }
   },
-  // JSON 工具导航页
-  {
-    path: '/json',
-    name: 'JsonToolsNav',
-    component: () => import('../views/json/JsonToolsNav.vue'),
-    meta: {
-      title: 'JSON 工具',
-      hideInMenu: false
-    }
-  },
   // JSON 格式化
   {
     path: '/json/format',
@@ -28,16 +18,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../views/json/JsonFormat.vue'),
     meta: {
       title: 'JSON 格式化',
-      hideInMenu: true
-    }
-  },
-  // SQL 工具导航页
-  {
-    path: '/sql',
-    name: 'SqlToolsNav',
-    component: () => import('../views/sql/SqlToolsNav.vue'),
-    meta: {
-      title: 'SQL 工具',
       hideInMenu: false
     }
   },
@@ -48,7 +28,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../views/sql/SqlFill.vue'),
     meta: {
       title: 'SQL 数据填充',
-      hideInMenu: true
+      hideInMenu: false
     }
   },
   {
