@@ -48,8 +48,6 @@
               :showLength="true"
               :showLine="false"
               :showDoubleQuotes="true"
-              :virtual="true"
-              :height="600"
             />
             <n-empty
               v-else-if="!content.trim()"
