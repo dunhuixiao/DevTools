@@ -26,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import { watchEffect } from 'vue'
 import { NConfigProvider, NMessageProvider, NLayout, NLayoutContent, NGlobalStyle } from 'naive-ui'
 import { useTheme } from './composables/useTheme'
 import AppHeader from './components/layout/AppHeader.vue'
@@ -33,7 +34,16 @@ import AppFooter from './components/layout/AppFooter.vue'
 import BackToTop from './components/layout/BackToTop.vue'
 
 // 初始化主题，并获取主题配置
-const { naiveTheme, themeOverrides } = useTheme()
+const { isDark, naiveTheme, themeOverrides } = useTheme()
+
+// 监听暗色模式状态，动态管理根元素的 dark 类名
+watchEffect(() => {
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+})
 </script>
 
 <style>
@@ -48,6 +58,6 @@ const { naiveTheme, themeOverrides } = useTheme()
 .content-area {
   flex: 1;
   overflow-y: auto;
-  padding: var(--spacing-lg);
+  padding: 24px;
 }
 </style>

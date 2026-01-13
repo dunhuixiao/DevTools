@@ -1,5 +1,5 @@
 <template>
-  <div class="not-found-container">
+  <div class="flex items-center justify-center min-h-[calc(100vh-124px)] p-2xl sm:p-lg">
     <n-result
       status="404"
       title="404 页面未找到"
@@ -10,7 +10,7 @@
           <n-button type="primary" @click="goHome">
             返回首页
           </n-button>
-          <n-text depth="3" class="tip-text">
+          <n-text depth="3" class="text-sm">
             {{ countdown > 0 ? `${countdown} 秒后自动返回首页` : '' }}
           </n-text>
         </n-space>
@@ -50,15 +50,5 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.not-found-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  padding: var(--spacing-2xl);
-}
-
-.tip-text {
-  font-size: var(--font-size-sm);
-}
+/* NotFound 页面样式已迁移到 Tailwind 类名 */
 </style>

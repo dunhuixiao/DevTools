@@ -1,8 +1,8 @@
 <template>
-  <n-layout-footer bordered class="footer">
-    <n-text depth="3" class="copyright-text">
+  <n-layout-footer bordered class="flex items-center justify-center min-h-footer px-lg text-center border-t sm:min-h-auto sm:px-base">
+    <n-text depth="3" class="text-sm opacity-75 sm:text-xs">
       Copyright © 2025 - present 
-      <a href="https://github.com/dunhuixiao" target="_blank" rel="noopener noreferrer" class="author-link">Sora</a>
+      <a href="https://github.com/dunhuixiao" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary-hover font-medium transition-colors duration-fast hover:underline">Sora</a>
     </n-text>
   </n-layout-footer>
 </template>
@@ -12,39 +12,5 @@ import { NLayoutFooter, NText } from 'naive-ui'
 </script>
 
 <style scoped>
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--footer-height);
-  padding: var(--spacing-lg);
-  text-align: center;
-}
-
-.copyright-text {
-  font-size: var(--font-size-sm);
-}
-
-.author-link {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color var(--transition-fast);
-}
-
-.author-link:hover {
-  color: var(--primary-color-hover);
-  text-decoration: underline;
-}
-
-@media (max-width: 767px) {
-  .footer {
-    min-height: auto;
-    padding: var(--spacing-base);
-  }
-
-  .copyright-text {
-    font-size: var(--font-size-xs);
-  }
-}
+/* AppFooter 组件样式已迁移到 Tailwind 类名 */
 </style>

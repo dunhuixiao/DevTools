@@ -1,6 +1,6 @@
 <template>
-  <div class="tool-container">
-    <n-card title="JSON 格式化" :segmented="{ content: true }" class="tool-card">
+  <div class="p-base w-full h-[calc(100vh-120px)] overflow-hidden">
+    <n-card title="JSON 格式化" :segmented="{ content: true }" class="h-full flex flex-col">
       <template #header-extra>
         <n-space>
           <n-button type="primary" size="small" @click="handleFormat"
@@ -23,8 +23,8 @@
       </template>
 
       <n-grid :cols="2" :x-gap="16" class="json-grid">
-        <n-grid-item class="json-editor-panel">
-          <div class="panel-header">输入编辑</div>
+        <n-grid-item class="flex flex-col h-full min-h-0">
+          <div class="text-sm font-medium mb-2">输入编辑</div>
           <n-input
             ref="inputRef"
             v-model:value="content"
@@ -32,15 +32,15 @@
             placeholder="请输入 JSON 字符串或内容..."
             :autosize="false"
             :resizable="false"
-            class="json-input"
+            class="flex-1 min-h-0 flex flex-col"
             @keydown="handleKeydown"
             @wheel.stop
           />
         </n-grid-item>
 
-        <n-grid-item class="json-preview-panel">
-          <div class="panel-header">结构预览</div>
-          <div class="json-preview-container" @wheel.stop>
+        <n-grid-item class="flex flex-col h-full min-h-0">
+          <div class="text-sm font-medium mb-2">结构预览</div>
+          <div class="flex-1 min-h-0 overflow-auto border rounded p-3" @wheel.stop>
             <vue-json-pretty
               v-if="parsedJson !== null"
               :data="parsedJson"
@@ -305,22 +305,51 @@ const handleCopy = async () => {
 </script>
 
 <style scoped>
-.tool-container {
-  padding: var(--spacing-base);
-  max-width: 100%;
-  width: 100%;
-  margin: 0;
-  height: calc(100vh - 120px);
-  overflow: hidden;
-}
+/* JsonFormat 页面样式主要迁移到 Tailwind 类名 */
 
-.tool-card {
+/* Naive UI 输入框深度定制 */
+.flex-1 :deep(.n-input-wrapper) {
+  flex: 1;
   height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
-.tool-card :deep(.n-card__content) {
+.flex-1 :deep(.n-input__textarea) {
+  flex: 1;
+  height: 100%;
+}
+
+.flex-1 :deep(.n-input__textarea-el),
+.flex-1 :deep(textarea) {
+  flex: 1;
+  height: 100%;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow: auto;
+  min-height: 0 !important;
+  resize: none !important;
+}
+
+/* 移除拖拽手柄 */
+.flex-1 :deep(textarea::-webkit-resizer),
+.flex-1 :deep(.n-input__textarea-el::-webkit-resizer) {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+.flex-1 :deep(textarea),
+.flex-1 :deep(.n-input__textarea-el) {
+  resize: none !important;
+  overflow: auto !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+/* 卡片内容布局 */
+:deep(.n-card__content) {
   flex: 1;
   overflow: hidden;
   display: flex;
@@ -332,80 +361,9 @@ const handleCopy = async () => {
   min-height: 0;
 }
 
-.json-editor-panel,
-.json-preview-panel {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-}
-
-.panel-header {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 8px;
-  color: var(--n-text-color);
-}
-
-.json-input {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.json-input :deep(.n-input-wrapper) {
-  flex: 1;
-  height: 100%;
-}
-
-.json-input :deep(.n-input__textarea) {
-  flex: 1;
-  height: 100%;
-}
-
-.json-input :deep(.n-input__textarea-el),
-.json-input :deep(textarea) {
-  flex: 1;
-  height: 100% !important;
-  min-height: 0 !important;
-  resize: none !important;
-  font-family: var(--font-family-mono);
-  font-size: 14px;
-  line-height: 1.6;
-  overflow: auto !important;
-}
-
-/* 彻底移除拖拽手柄 - 多种浏览器兼容 */
-.json-input :deep(textarea::-webkit-resizer),
-.json-input :deep(.n-input__textarea-el::-webkit-resizer) {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
-}
-
-.json-input :deep(textarea),
-.json-input :deep(.n-input__textarea-el) {
-  resize: none !important;
-  overflow: auto !important;
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  appearance: none !important;
-}
-
-.json-preview-container {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  border: 1px solid var(--n-border-color);
-  border-radius: var(--n-border-radius);
-  padding: 12px;
-  background-color: var(--n-color);
-}
-
+/* JSON 树样式 */
 :deep(.vjs-tree) {
-  font-family: var(--font-family-mono);
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   font-size: 14px;
 }
 </style>

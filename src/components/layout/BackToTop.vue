@@ -6,7 +6,7 @@
       type="primary"
       size="large"
       title="回到顶部"
-      class="back-to-top"
+      class="fixed right-10 bottom-10 z-back-to-top shadow-lg sm:right-5 sm:bottom-5"
       @click="scrollToTop"
     >
       <template #icon>
@@ -27,18 +27,5 @@ const { showBackToTop, scrollToTop } = useScroll(300)
 </script>
 
 <style scoped>
-.back-to-top {
-  position: fixed;
-  right: 40px;
-  bottom: 40px;
-  z-index: var(--z-index-back-to-top);
-  box-shadow: var(--shadow-lg);
-}
-
-@media (max-width: 767px) {
-  .back-to-top {
-    right: 20px;
-    bottom: 20px;
-  }
-}
+/* BackToTop 组件样式已迁移到 Tailwind 类名 */
 </style>

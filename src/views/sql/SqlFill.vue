@@ -1,6 +1,6 @@
 <template>
-  <div class="tool-container">
-    <n-card title="SQL 数据填充" :segmented="{ content: true }" class="tool-card">
+  <div class="p-base w-full min-h-[calc(100vh-120px)] overflow-y-auto">
+    <n-card title="SQL 数据填充" :segmented="{ content: true }" class="h-auto flex flex-col">
       <template #header-extra>
         <n-space>
           <n-button size="small" @click="handleCopyResult" :disabled="!filledResult">复制结果</n-button>
@@ -9,26 +9,26 @@
       </template>
 
       <n-space vertical :size="12" style="height: 100%; display: flex; flex-direction: column;">
-        <n-form-item label="SQL 模板" class="sql-form-item">
+        <n-form-item label="SQL 模板" class="flex flex-col">
           <n-input
             ref="sqlInputRef"
             v-model:value="sqlTemplate"
             type="textarea"
             placeholder="请输入 SQL 模板，使用 ? 作为占位符&#10;示例: SELECT * FROM users WHERE id = ? AND name = ? AND age > ?"
-            class="sql-input"
+            class="flex flex-col"
             :autosize="{ minRows: 5, maxRows: 10 }"
             @keydown="handleSqlKeydown"
             @wheel.stop
           />
         </n-form-item>
 
-        <n-form-item label="参数列表（逗号分隔）" class="sql-form-item">
+        <n-form-item label="参数列表（逗号分隔）" class="flex flex-col">
           <n-input
             ref="paramInputRef"
             v-model:value="parameters"
             type="textarea"
             placeholder="请输入参数，逗号分隔&#10;示例: 123(Long), 张三(String), 18(Integer)"
-            class="sql-input"
+            class="flex flex-col"
             :autosize="{ minRows: 5, maxRows: 10 }"
             @keydown="handleParamKeydown"
             @blur="handleAutoFill"
@@ -36,12 +36,12 @@
           />
         </n-form-item>
 
-        <n-form-item label="填充结果" class="sql-form-item">
+        <n-form-item label="填充结果" class="flex flex-col">
           <n-input
             v-model:value="filledResult"
             type="textarea"
             placeholder="填充结果将在此显示"
-            class="sql-input"
+            class="flex flex-col"
             :autosize="{ minRows: 10, maxRows: 20 }"
             readonly
             @wheel.stop
@@ -317,64 +317,41 @@ const handleCopyResult = async () => {
 </script>
 
 <style scoped>
-.tool-container {
-  padding: var(--spacing-base);
-  max-width: 100%;
-  width: 100%;
-  margin: 0;
-  min-height: calc(100vh - 120px);
-  overflow-y: auto;
-}
+/* SqlFill 页面样式主要迁移到 Tailwind 类名 */
 
-.tool-card {
-  height: auto;
+/* Naive UI 输入框深度定制 */
+.flex-col :deep(.n-form-item-blank) {
   display: flex;
   flex-direction: column;
 }
 
-.tool-card :deep(.n-card__content) {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.sql-form-item :deep(.n-form-item-blank) {
-  display: flex;
-  flex-direction: column;
-}
-
-.sql-input {
-  display: flex;
-  flex-direction: column;
-}
-
-.sql-input :deep(.n-input-wrapper) {
+.flex-col :deep(.n-input-wrapper) {
   width: 100%;
 }
 
-.sql-input :deep(.n-input__textarea) {
+.flex-col :deep(.n-input__textarea) {
   width: 100%;
 }
 
-.sql-input :deep(.n-input__textarea-el),
-.sql-input :deep(textarea) {
-  resize: none !important;
-  font-family: var(--font-family-mono);
+.flex-col :deep(.n-input__textarea-el),
+.flex-col :deep(textarea) {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   font-size: 14px;
   line-height: 1.6;
+  resize: none !important;
 }
 
-/* 彻底移除拖拽手柄 - 多种浏览器兼容 */
-.sql-input :deep(textarea::-webkit-resizer),
-.sql-input :deep(.n-input__textarea-el::-webkit-resizer) {
+/* 移除拖拽手柄 */
+.flex-col :deep(textarea::-webkit-resizer),
+.flex-col :deep(.n-input__textarea-el::-webkit-resizer) {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
   background: transparent !important;
 }
 
-.sql-input :deep(textarea),
-.sql-input :deep(.n-input__textarea-el) {
+.flex-col :deep(textarea),
+.flex-col :deep(.n-input__textarea-el) {
   resize: none !important;
   overflow: auto !important;
   -webkit-appearance: none !important;
@@ -382,16 +359,25 @@ const handleCopyResult = async () => {
   appearance: none !important;
 }
 
+/* 卡片内容布局 */
+:deep(.n-card__content) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 code {
   background-color: rgba(150, 150, 150, 0.1);
-  padding: 2px 6px;
+  padding: 6px;
+  padding-top: 2px;
+  padding-bottom: 2px;
   border-radius: 3px;
-  font-family: var(--font-family-mono);
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   font-size: 0.9em;
 }
 
 ul {
-  line-height: 1.8;
+  line-height: 2;
 }
 
 ul ul {
@@ -399,7 +385,7 @@ ul ul {
 }
 
 :deep(textarea) {
-  font-family: var(--font-family-mono);
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   font-size: 14px;
   line-height: 1.6;
 }

@@ -1,31 +1,31 @@
 <template>
-  <div class="home-container">
-    <div class="hero-section">
+  <div class="max-w-full m-0 p-base px-lg h-[calc(100vh-120px)] overflow-y-auto sm:p-base">
+    <div class="text-center py-lg pb-base">
       <n-icon :size="48" color="#18a058">
         <ConstructOutline />
       </n-icon>
-      <h1 class="hero-title">开发工具箱</h1>
-      <p class="hero-description">
+      <h1 class="text-3xl font-bold my-base mb-xs sm:text-2xl">开发工具箱</h1>
+      <p class="text-base max-w-2xl mx-auto opacity-80 sm:text-sm">
         面向开发者的在线工具集平台
       </p>
     </div>
 
-    <div class="tools-section">
+    <div class="mt-base">
       <n-grid :x-gap="12" :y-gap="12" cols="1 640:2 1024:3 1280:4">
         <n-grid-item v-for="tool in tools" :key="tool.id">
           <n-card
             hoverable
-            class="tool-card"
+            class="cursor-pointer transition-all duration-base hover:-translate-y-1 hover:shadow-lg h-full active:translate-y-0 active:shadow"
             @click="navigateToTool(tool.route)"
           >
-            <div class="tool-icon">
+            <div class="mb-base">
               <n-icon :size="32" color="#18a058">
                 <component :is="tool.icon" />
               </n-icon>
             </div>
-            <h3 class="tool-name">{{ tool.name }}</h3>
-            <p class="tool-description">{{ tool.description }}</p>
-            <n-tag :type="tool.type as 'success' | 'info'" size="small" class="tool-tag">{{ tool.category }}</n-tag>
+            <h3 class="text-base font-semibold my-xs">{{ tool.name }}</h3>
+            <p class="text-xs my-xs leading-snug opacity-80">{{ tool.description }}</p>
+            <n-tag :type="tool.type as 'success' | 'info'" size="small" class="mt-xs">{{ tool.category }}</n-tag>
           </n-card>
         </n-grid-item>
       </n-grid>
@@ -72,79 +72,5 @@ const navigateToTool = (route: string) => {
 </script>
 
 <style scoped>
-.home-container {
-  max-width: 100%;
-  margin: 0;
-  padding: var(--spacing-base) var(--spacing-lg);
-  height: calc(100vh - 120px);
-  overflow-y: auto;
-}
-
-.hero-section {
-  text-align: center;
-  padding: var(--spacing-lg) 0 var(--spacing-base);
-}
-
-.hero-title {
-  font-size: 28px;
-  font-weight: 700;
-  margin: var(--spacing-base) 0 var(--spacing-xs);
-}
-
-.hero-description {
-  font-size: var(--font-size-base);
-  max-width: 600px;
-  margin: 0 auto;
-  opacity: 0.8;
-}
-
-.tools-section {
-  margin-top: var(--spacing-base);
-}
-
-.tool-card {
-  cursor: pointer;
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
-  height: 100%;
-}
-
-.tool-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.tool-icon {
-  margin-bottom: var(--spacing-base);
-}
-
-.tool-name {
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  margin: var(--spacing-xs) 0;
-}
-
-.tool-description {
-  font-size: var(--font-size-xs);
-  margin: var(--spacing-xs) 0;
-  line-height: 1.4;
-  opacity: 0.8;
-}
-
-.tool-tag {
-  margin-top: var(--spacing-xs);
-}
-
-@media (max-width: 767px) {
-  .home-container {
-    padding: var(--spacing-base);
-  }
-
-  .hero-title {
-    font-size: 24px;
-  }
-
-  .hero-description {
-    font-size: var(--font-size-sm);
-  }
-}
+/* ToolsList 页面样式已迁移到 Tailwind 类名 */
 </style>
